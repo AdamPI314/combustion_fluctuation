@@ -1,0 +1,9 @@
+/home/invictus/Documents/spring_2018_boulder/SRC_EXE_DIR/SOHR
+{}
+[]
+OrderedDict()
+{}
+[]
+OrderedDict()
+running time:	0.00 hours
+
