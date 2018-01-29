@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pylab as plt
+from matplotlib.ticker import FormatStrFormatter
 
 import parse_spe_reaction_info as psri
 import global_settings
@@ -75,6 +76,7 @@ def plot_concentrations(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fracti
     leg_left.get_frame().set_alpha(0.7)
     a_x_left.grid()
     a_x_left.set_xlim([0, tau * end_t])
+    a_x_left.xaxis.set_major_formatter(FormatStrFormatter('%.1e'))
 
     a_x_left.set_xlabel("Time/sec")
     a_x_left.set_ylabel("[X]")
@@ -222,6 +224,7 @@ def plot_reaction_rates(file_dir, reaction_idx=None, tau=10.0, end_t=1.0, tag="f
     leg_left.get_frame().set_alpha(0.7)
     leg_right.get_frame().set_alpha(0.7)
     a_x_left.grid()
+    a_x_left.xaxis.set_major_formatter(FormatStrFormatter('%.1e'))
 
     a_x_left.set_xlabel("Time/sec")
 
@@ -247,5 +250,5 @@ if __name__ == '__main__':
     #     traj_max_t=G_S['traj_max_t'], tau=G_S['tau'], end_t=G_S['end_t'],
     #     tag="M", atoms=["C", "O"])
     plot_concentrations(FILE_DIR, spe_idx=SPE_LIST,
-                        tau=G_S['tau'], end_t=0.8, tag="M", exclude_names=None,
+                        tau=G_S['tau'], end_t=0.001, tag="M", exclude_names=None,
                         renormalization=False, semilogy=True, hasTemp=True)

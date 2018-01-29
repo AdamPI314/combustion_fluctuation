@@ -10,6 +10,7 @@ import parse_spe_reaction_info as psri
 import prepare_path_name_time as ppnt
 import naming
 import trajectory
+import global_settings
 
 
 def update_terminal_species_setting(file_dir, terminal_spe=None):
@@ -233,4 +234,6 @@ def send_email(file_dir):
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir))
+    G_S = global_settings.get_setting(FILE_DIR)
     # symbolic_path_2_real_path_pff(FILE_DIR, "heuristic_pathname_O_10_10_3.csv")
+    spe_concentration_at_time_w2f(FILE_DIR, tau=G_S['tau'], end_t=0.00022854295)
