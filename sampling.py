@@ -18,7 +18,7 @@ def get_uniform_uncertainties(n_size=3, value=3.0):
     """
     result = np.ones(n_size)
     for i, _ in enumerate(result):
-        result[i] = value
+        result[i] = float(value)
     return result
 
 
@@ -57,9 +57,13 @@ def run_a_sample(file_dir):
     # local target file name
     l_t_f_n = os.path.join(file_dir, "output", "ign_local.csv")
 
+    u_u = get_uniform_uncertainties(
+        s_a_s['n_dim'], s_a_s['default_uncertainty'])
+    # save constant uncertainty to file
+    f_n_u_const = os.path.join(file_dir, "output", "uncertainties_const.csv")
+    np.savetxt(f_n_u_const, u_u, fmt='%.18e',  delimiter=',', newline='\n')
+
     for _ in range(s_a_s['n_run']):
-        u_u = get_uniform_uncertainties(
-            s_a_s['n_dim'], s_a_s['default_uncertainty'])
         r_c = get_random_coef(uniform_uncertainties=u_u)
 
         spe_idx_conc = copy.deepcopy(s_a_s['spe_idx_conc'])
