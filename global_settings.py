@@ -97,6 +97,19 @@ def get_setting(file_dir):
         return setting
 
 
+def get_s_a_setting(file_dir):
+    """
+    return sensitivity analysis setting
+    """
+    setting = {}
+    try:
+        sys.path.append(os.path.join(file_dir, "input"))
+        import local_settings
+        return local_settings.get_s_a_setting()
+    except IOError:
+        return setting
+
+
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir))

@@ -1,0 +1,1 @@
+/opt/anaconda/bin/python ./main_driver.py 1>log.txt 2>&1 & 

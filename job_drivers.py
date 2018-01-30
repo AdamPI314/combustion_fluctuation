@@ -133,6 +133,39 @@ def make_run(file_dir):
     error_file.close()
 
 
+def make_run_timeout(file_dir, timeout=None):
+    """
+    make run with timeout functionaliry
+    https://stackoverflow.com/questions/1191374/using-module-subprocess-with-timeout
+    """
+    os.chdir(file_dir)
+    cmd = ["make", "run"]
+
+    # Open/Create the output file
+    out_file = open(os.path.join(
+        file_dir, 'output', 'output_all.txt'), 'ab+')
+    error_file = open(os.path.join(
+        file_dir, 'output', 'error_all.txt'), 'ab+')
+
+    try:
+        subprocess.check_call(
+            cmd, stdout=out_file, stderr=error_file,
+            timeout=timeout)
+        status = 0
+    except subprocess.TimeoutExpired:
+        status = -1
+    except subprocess.CalledProcessError:
+        status = -1
+
+    out_file.close()
+    error_file.close()
+
+    if status == 0:
+        return True
+    else:
+        return False
+
+
 def run_dlsode(file_dir, max_time, critical_time):
     """
     Run dlsode
@@ -236,4 +269,5 @@ if __name__ == '__main__':
         sys.argv[0]), os.pardir, os.pardir, os.pardir))
     G_S = global_settings.get_setting(FILE_DIR)
     # symbolic_path_2_real_path_pff(FILE_DIR, "heuristic_pathname_O_10_10_3.csv")
-    spe_concentration_at_time_w2f(FILE_DIR, tau=G_S['tau'], end_t=0.00022854295)
+    spe_concentration_at_time_w2f(
+        FILE_DIR, tau=G_S['tau'], end_t=0.00022854295)

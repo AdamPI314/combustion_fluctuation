@@ -199,3 +199,39 @@ def update_eval_path_integral(file_dir, top_n=5, n_traj=10000, atom_followed="C"
 
     rwc.write_configuration(setting, os.path.join(
         file_dir, 'input', 'setting.json'))
+
+
+def update_s_a_setting(file_dir, init_temp=1000, critical_temp=1100,
+                       target_temp=1800, end_temp=1900, spe_idx_conc=None):
+    """
+    update settings.json, primarily for sensitivity analysis
+    the last parameter represents "species index concentration", is a dict
+    """
+    # there will always be a current setting
+    fn0 = os.path.join(file_dir, "input", "setting_backup.json")
+    fn1 = os.path.join(file_dir, "input", "setting.json")
+
+    if os.path.isfile(fn1):
+        copy2(fn1, fn0)
+
+    setting = rwc.read_configuration(
+        os.path.join(file_dir, 'input', 'setting.json'))
+
+    setting['propagator']['primary_type'] = "not_from_file"
+    setting['propagator']['type'] = "dlsode"
+    setting['propagator']['sub_type'] = "temperature_propagator_cv_s2m_pgt"
+    setting['propagator']['normalize_initial_concentration'] = "no"
+
+    setting['job']['job_type'] = "evaluate_ignition_delay_time_once"
+
+    setting['chem_init']['init_temperature'] = init_temp
+
+    setting['T']['critical_temperature'] = critical_temp
+    setting['T']['target_temperature'] = target_temp
+    setting['T']['end_temperature'] = end_temp
+
+    if spe_idx_conc is not None:
+        setting['chem_init']['species_index_concentration'] = spe_idx_conc
+
+    rwc.write_configuration(setting, os.path.join(
+        file_dir, 'input', 'setting.json'))
