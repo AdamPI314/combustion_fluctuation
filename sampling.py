@@ -84,7 +84,7 @@ def run_a_sample(file_dir):
                               end_temp=s_a_s['end_temp'],
                               spe_idx_conc=spe_idx_conc)
 
-        flag = job_drivers.make_run_timeout(file_dir, timeout=30)
+        flag = job_drivers.make_run_timeout(file_dir, timeout=s_a_s['timeout'])
 
         # local target time
         local_t_t = np.loadtxt(l_t_f_n, dtype=float, delimiter=',')
