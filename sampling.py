@@ -12,13 +12,18 @@ import update_settings as us
 import job_drivers
 
 
-def get_uniform_uncertainties(n_size=3, value=3.0):
+def get_uniform_uncertainties(n_size=3, value=3.0, exclude=None):
     """
     return uniform uncertainties
     """
     result = np.ones(n_size)
     for i, _ in enumerate(result):
         result[i] = float(value)
+    if exclude is not None:
+        for idx in exclude:
+            idx_valid = int(idx)
+            if idx_valid >= 0 and idx_valid < n_size:
+                result[idx_valid] = 1.0
     return result
 
 
@@ -58,7 +63,7 @@ def run_a_sample(file_dir):
     l_t_f_n = os.path.join(file_dir, "output", "ign_local.csv")
 
     u_u = get_uniform_uncertainties(
-        s_a_s['n_dim'], s_a_s['default_uncertainty'])
+        s_a_s['n_dim'], s_a_s['default_uncertainty'], s_a_s['exclude'])
     # save constant uncertainty to file
     f_n_u_const = os.path.join(file_dir, "output", "uncertainties_const.csv")
     np.savetxt(f_n_u_const, u_u, fmt='%.18e',  delimiter=',', newline='\n')
