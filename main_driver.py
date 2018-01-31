@@ -31,8 +31,10 @@ if __name__ == '__main__':
         FILE_DIR, G_S['atom_f'])
 
     # write specie concentration at a time to file
+    # job_drivers.spe_concentration_at_time_w2f(
+    #     FILE_DIR, tau=G_S['tau'], end_t=G_S['end_t'])
     job_drivers.spe_concentration_at_time_w2f(
-        FILE_DIR, tau=G_S['tau'], end_t=G_S['end_t'])
+        FILE_DIR, tau=G_S['tau'], end_t=0.00228542952)
 
     # # run monte carlo trajectory
     # job_drivers.run_mc_trajectory(
@@ -48,10 +50,10 @@ if __name__ == '__main__':
     #     top_n_s=G_S['top_n_s'], spe_oriented=G_S['spe_oriented'],
     #     end_s_idx=G_S['end_s_idx'], species_path=G_S['species_path'])
 
-    # convert symbolic pathway to real pathway
-    # with real species names and real reaction expression
-    job_drivers.symbolic_path_2_real_path(FILE_DIR, top_n=G_S['top_n_p'], flag="",
-                                          end_s_idx=None, species_path=G_S['species_path'])
+    # # convert symbolic pathway to real pathway
+    # # with real species names and real reaction expression
+    # job_drivers.symbolic_path_2_real_path(FILE_DIR, top_n=G_S['top_n_p'], flag="",
+    #                                       end_s_idx=None, species_path=G_S['species_path'])
 
     # # copy SOHR/C++ routine files
     # job_drivers.copy_sohr_files(FILE_DIR, species_path=G_S['species_path'])
