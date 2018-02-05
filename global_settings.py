@@ -112,6 +112,6 @@ def get_s_a_setting(file_dir):
 
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
-        sys.argv[0]), os.pardir, os.pardir, os.pardir))
+        sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     get_union_find_group(FILE_DIR, atom_followed="C")
     print("test")

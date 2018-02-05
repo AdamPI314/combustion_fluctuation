@@ -266,7 +266,7 @@ def send_email(file_dir):
 
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
-        sys.argv[0]), os.pardir, os.pardir, os.pardir))
+        sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     G_S = global_settings.get_setting(FILE_DIR)
     # symbolic_path_2_real_path_pff(FILE_DIR, "heuristic_pathname_O_10_10_3.csv")
     spe_concentration_at_time_w2f(

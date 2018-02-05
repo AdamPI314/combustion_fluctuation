@@ -241,7 +241,7 @@ def plot_reaction_rates(file_dir, reaction_idx=None, tau=10.0, end_t=1.0, tag="f
 
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
-        sys.argv[0]), os.pardir, os.pardir, os.pardir))
+        sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     G_S = global_settings.get_setting(FILE_DIR)
 
     SPE_LIST = [3, 4, 5, 6, 7]

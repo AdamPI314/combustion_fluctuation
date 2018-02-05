@@ -137,6 +137,6 @@ def copy_sohr_files(file_dir, species_path=False):
 
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
-        sys.argv[0]), os.pardir, os.pardir, os.pardir))
+        sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     print(FILE_DIR)
     copy_sohr_files(FILE_DIR)

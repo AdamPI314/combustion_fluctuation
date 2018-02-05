@@ -76,7 +76,7 @@ def prepare_pathway_time(file_dir, top_n=5, num=1, flag="", begin_t=0.0, end_t=1
 if __name__ == '__main__':
     #     print("hello")
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
-        sys.argv[0]), os.pardir, os.pardir, os.pardir))
+        sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
 #     print(FILE_DIR)
 
     prepare_pathway_name(FILE_DIR, top_n=5, flag="",

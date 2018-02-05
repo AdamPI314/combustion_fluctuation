@@ -195,7 +195,7 @@ def get_normalized_concentration_at_time(file_dir, tag="fraction", end_t=1.0, ex
 
 if __name__ == '__main__':
     FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
-        sys.argv[0]), os.pardir, os.pardir, os.pardir))
+        sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     print(FILE_DIR)
     # get_normalized_concentration_at_time(
     #     FILE_DIR, tag="M", end_t=0.9, exclude_names=None, renormalization=True)
