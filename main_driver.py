@@ -13,6 +13,8 @@ import global_settings
 if __name__ == '__main__':
     TIME_I = time.time()
 
+    SRC_DIR = os.path.abspath(os.path.join(os.path.realpath(
+        sys.argv[0]), os.pardir, os.pardir, os.pardir))
     DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     print(DATA_DIR)
@@ -21,7 +23,7 @@ if __name__ == '__main__':
     us.update_basic_setting(DATA_DIR, G_S)
 
     # run dlosde
-    job_drivers.run_dlsode(DATA_DIR, G_S['traj_max_t'], G_S['traj_critical_t'])
+    job_drivers.run_dlsode(SRC_DIR, DATA_DIR, G_S['traj_max_t'], G_S['traj_critical_t'])
 
     # update terminal species
     job_drivers.update_terminal_species_setting(DATA_DIR, G_S['terminal_spe'])
@@ -32,19 +34,19 @@ if __name__ == '__main__':
 
     # write specie concentration at a time to file
     # job_drivers.spe_concentration_at_time_w2f(
-    #     DATA_DIR, tau=G_S['tau'], end_t=G_S['end_t'])
+    #     SRC_DIR, DATA_DIR, tau=G_S['tau'], end_t=G_S['end_t'])
     job_drivers.spe_concentration_at_time_w2f(
-        DATA_DIR, tau=G_S['tau'], end_t=0.00228542952)
+        SRC_DIR, DATA_DIR, tau=G_S['tau'], end_t=0.00228542952)
 
     # # run monte carlo trajectory
     # job_drivers.run_mc_trajectory(
-    #     DATA_DIR, n_traj=G_S['mc_n_traj'], atom_followed=G_S['atom_f'],
+    #     SRC_DIR, DATA_DIR, n_traj=G_S['mc_n_traj'], atom_followed=G_S['atom_f'],
     #     init_spe=G_S['init_s'], tau=G_S['tau'], begin_t=G_S['begin_t'], end_t=G_S['mc_t'],
     #     species_path=G_S['species_path'])
 
     # # evaluate path integral-->pathway probability
     # job_drivers.evaluate_pathway_probability(
-    #     DATA_DIR, top_n=G_S['top_n_p'], num_t=G_S['pi_n_time'], flag="",
+    #     SRC_DIR, DATA_DIR, top_n=G_S['top_n_p'], num_t=G_S['pi_n_time'], flag="",
     #     n_traj=G_S['pi_n_traj'], atom_followed=G_S['atom_f'], init_spe=G_S['init_s'],
     #     traj_max_t=G_S['traj_max_t'], tau=G_S['tau'], begin_t=G_S['begin_t'], end_t=G_S['end_t'],
     #     top_n_s=G_S['top_n_s'], spe_oriented=G_S['spe_oriented'],

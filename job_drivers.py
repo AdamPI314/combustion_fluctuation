@@ -105,11 +105,11 @@ def delete_non_dlsode_files(data_dir):
     error_file.close()
 
 
-def make_run(data_dir):
+def make_run(src_dir, data_dir):
     """
     make run
     """
-    os.chdir(data_dir)
+    os.chdir(src_dir)
     cmd = ["make", "run"]
 
     # Open/Create the output file
@@ -133,12 +133,12 @@ def make_run(data_dir):
     error_file.close()
 
 
-def make_run_timeout(data_dir, timeout=None):
+def make_run_timeout(src_dir, data_dir, timeout=None):
     """
     make run with timeout functionaliry
     https://stackoverflow.com/questions/1191374/using-module-subprocess-with-timeout
     """
-    os.chdir(data_dir)
+    os.chdir(src_dir)
     cmd = ["make", "run"]
 
     # Open/Create the output file
@@ -166,37 +166,37 @@ def make_run_timeout(data_dir, timeout=None):
         return False
 
 
-def run_dlsode(data_dir, max_time, critical_time):
+def run_dlsode(src_dir, data_dir, max_time, critical_time):
     """
     Run dlsode
     """
-    os.chdir(data_dir)
+    os.chdir(src_dir)
     us.update_dlsode_setting(data_dir, max_time, critical_time)
-    make_run(data_dir)
+    make_run(src_dir, data_dir)
 
 
-def spe_concentration_at_time_w2f(data_dir, tau=10.0, end_t=1.0):
+def spe_concentration_at_time_w2f(src_dir, data_dir, tau=10.0, end_t=1.0):
     """
     write species concentration at a time to file
     """
-    os.chdir(data_dir)
+    os.chdir(src_dir)
     us.update_spe_concentration_at_time_w2f(data_dir, tau=tau, end_t=end_t)
-    make_run(data_dir)
+    make_run(src_dir, data_dir)
 
 
-def run_mc_trajectory(data_dir, n_traj=1000000, atom_followed="C", init_spe=114,
+def run_mc_trajectory(src_dir, data_dir, n_traj=1000000, atom_followed="C", init_spe=114,
                       tau=10.0, begin_t=0.0, end_t=1.0, species_path=False):
     """
     Run mc trajectory
     """
-    os.chdir(data_dir)
+    os.chdir(src_dir)
     us.update_mc_trajectory_setting(
         data_dir, n_traj=n_traj, atom_followed=atom_followed, init_spe=init_spe,
         tau=tau, begin_t=begin_t, end_t=end_t, species_path=species_path)
-    make_run(data_dir)
+    make_run(src_dir, data_dir)
 
 
-def evaluate_pathway_probability(data_dir, top_n=5, num_t=1, flag="", n_traj=10000,
+def evaluate_pathway_probability(src_dir, data_dir, top_n=5, num_t=1, flag="", n_traj=10000,
                                  atom_followed="C", init_spe=114, traj_max_t=100.0,
                                  tau=10.0, begin_t=0.0, end_t=1.0, top_n_s=10,
                                  spe_oriented=True, end_s_idx=None, species_path=False):
@@ -205,7 +205,7 @@ def evaluate_pathway_probability(data_dir, top_n=5, num_t=1, flag="", n_traj=100
     top_n_s is top N species number
     num_t is number of time points
     """
-    os.chdir(data_dir)
+    os.chdir(src_dir)
 
     if spe_oriented is True:
         us.update_eval_path_integral(
@@ -231,7 +231,7 @@ def evaluate_pathway_probability(data_dir, top_n=5, num_t=1, flag="", n_traj=100
         ppnt.prepare_pathway_time(
             data_dir, top_n=top_n, num=num_t, flag=flag, begin_t=begin_t, end_t=end_t, species_path=species_path)
 
-    make_run(data_dir)
+    make_run(src_dir, data_dir)
 
 
 def send_email(data_dir):
@@ -265,9 +265,11 @@ def send_email(data_dir):
 
 
 if __name__ == '__main__':
+    SRC_DIR = os.path.abspath(os.path.join(os.path.realpath(
+        sys.argv[0]), os.pardir, os.pardir, os.pardir))
     DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
     G_S = global_settings.get_setting(DATA_DIR)
     # symbolic_path_2_real_path_pff(DATA_DIR, "heuristic_pathname_O_10_10_3.csv")
     spe_concentration_at_time_w2f(
-        DATA_DIR, tau=G_S['tau'], end_t=0.00022854295)
+        SRC_DIR, DATA_DIR, tau=G_S['tau'], end_t=0.00022854295)
