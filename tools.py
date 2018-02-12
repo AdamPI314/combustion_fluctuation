@@ -44,7 +44,7 @@ def get_colors_markers_linestyles():
     return colors, markers, linestyles
 
 
-def make_figure_template(file_dir):
+def make_figure_template(data_dir):
     """
     make_figure_template
     """
@@ -56,9 +56,9 @@ def make_figure_template(file_dir):
     # figure name
     fig_name = "test.jpg"
 
-    data_x = np.loadtxt(os.path.join(file_dir, f_n_x),
+    data_x = np.loadtxt(os.path.join(data_dir, f_n_x),
                         dtype=float, delimiter=",")
-    data_y = np.loadtxt(os.path.join(file_dir, f_n_y),
+    data_y = np.loadtxt(os.path.join(data_dir, f_n_y),
                         dtype=float, delimiter=",")
     # specify label for lines
     labels = ["line" + str(i + 1) for i in range(len(data_y))]
@@ -83,23 +83,23 @@ def make_figure_template(file_dir):
     a_x.set_title("O$_2$ + npropyl")
 
     fig.tight_layout()
-    fig.savefig(os.path.join(file_dir, fig_name), dpi=500)
+    fig.savefig(os.path.join(data_dir, fig_name), dpi=500)
     plt.close()
 
 
-def pathway_time_2_array_index(file_dir, init_spe=None, atom_followed="C",
+def pathway_time_2_array_index(data_dir, init_spe=None, atom_followed="C",
                                end_t=1.0, species_path=False, time=1.0):
     """
     pathway time converted to array index, pathway time read from pathway_time_canditate*
     """
-    suffix = get_suffix(file_dir, init_spe=init_spe,
+    suffix = get_suffix(data_dir, init_spe=init_spe,
                         atom_followed=atom_followed, end_t=end_t)
     prefix = ""
     if species_path is True:
         prefix = "species_"
 
     f_n_path_time = os.path.join(
-        file_dir, "output", prefix + "pathway_time_candidate" + suffix + ".csv")
+        data_dir, "output", prefix + "pathway_time_candidate" + suffix + ".csv")
 
     p_time = np.genfromtxt(f_n_path_time, dtype=float, delimiter=',')
 

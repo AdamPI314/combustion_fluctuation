@@ -17,9 +17,9 @@ def interp1d(x, y, target):
 if __name__ == '__main__':
     INIT_TIME = time.time()
 
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir))
-    print(FILE_DIR)
+    print(DATA_DIR)
 
     x = [1, 2, 3, 4]
     y = [1, 2, 3, 4]

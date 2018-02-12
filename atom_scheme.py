@@ -9,14 +9,14 @@ from shutil import copy2
 import read_write_configuration as rwc
 
 
-def spe_composition_2_atom_scheme(file_dir):
+def spe_composition_2_atom_scheme(data_dir):
     """
     convert species grouped atom scheme, which refers to file named
     "spe_composition.json" generated from cantera to a new file named
     "atom_scheme_base.json"
     """
     spe_comp = rwc.read_configuration(os.path.join(
-        file_dir, "input", "spe_composition.json"))
+        data_dir, "input", "spe_composition.json"))
 
     atom_scheme = {}
     for _, s_1 in enumerate(spe_comp):
@@ -27,8 +27,8 @@ def spe_composition_2_atom_scheme(file_dir):
             else:
                 atom_scheme[atom_1].update({str(s_1): spe_comp[s_1][atom_1]})
 
-    fn0 = os.path.join(file_dir, "input", "atom_scheme_base_backup.json")
-    fn1 = os.path.join(file_dir, "input", "atom_scheme_base.json")
+    fn0 = os.path.join(data_dir, "input", "atom_scheme_base_backup.json")
+    fn1 = os.path.join(data_dir, "input", "atom_scheme_base.json")
 
     if os.path.isfile(fn1):
         copy2(fn1, fn0)
@@ -36,14 +36,14 @@ def spe_composition_2_atom_scheme(file_dir):
     rwc.write_configuration(atom_scheme, fn1)
 
 
-def spe_information_2_atom_scheme(file_dir):
+def spe_information_2_atom_scheme(data_dir):
     """
     convert species information
     "species_information.json" to a new file named
     "atom_scheme_base.json"
     """
     spe_comp = rwc.read_configuration(os.path.join(
-        file_dir, "input", "species_information.json"))
+        data_dir, "input", "species_information.json"))
 
     atom_scheme = {}
     for _, spe_idx in enumerate(spe_comp):
@@ -57,8 +57,8 @@ def spe_information_2_atom_scheme(file_dir):
             else:
                 atom_scheme[atom_1].update({str(s_1): float(atom_number)})
 
-    fn0 = os.path.join(file_dir, "input", "atom_scheme_base_backup.json")
-    fn1 = os.path.join(file_dir, "input", "atom_scheme_base.json")
+    fn0 = os.path.join(data_dir, "input", "atom_scheme_base_backup.json")
+    fn1 = os.path.join(data_dir, "input", "atom_scheme_base.json")
 
     if os.path.isfile(fn1):
         copy2(fn1, fn0)
@@ -66,14 +66,14 @@ def spe_information_2_atom_scheme(file_dir):
     rwc.write_configuration(atom_scheme, fn1)
 
 
-def update_a_atom_entry(file_dir, source_atoms=None, entry_name="HA4", number=1.0):
+def update_a_atom_entry(data_dir, source_atoms=None, entry_name="HA4", number=1.0):
     """
     update a atom entry based on atoms list
     """
     if source_atoms is None or source_atoms is []:
         return
 
-    f_n_as = os.path.join(file_dir, "input", "atom_scheme.json")
+    f_n_as = os.path.join(data_dir, "input", "atom_scheme.json")
     atom_scheme = rwc.read_configuration(f_n_as)
 
     new_entry = {}
@@ -86,8 +86,8 @@ def update_a_atom_entry(file_dir, source_atoms=None, entry_name="HA4", number=1.
 
     atom_scheme.update({entry_name: new_entry})
 
-    fn0 = os.path.join(file_dir, "input", "atom_scheme_base_backup.json")
-    fn1 = os.path.join(file_dir, "input", "atom_scheme_base.json")
+    fn0 = os.path.join(data_dir, "input", "atom_scheme_base_backup.json")
+    fn1 = os.path.join(data_dir, "input", "atom_scheme_base.json")
 
     if os.path.isfile(fn1):
         copy2(fn1, fn0)
@@ -95,18 +95,18 @@ def update_a_atom_entry(file_dir, source_atoms=None, entry_name="HA4", number=1.
     rwc.write_configuration(atom_scheme, fn1)
 
 
-def atom_scheme_set_atom_number(file_dir, followed_atom="C", number=1.0):
+def atom_scheme_set_atom_number(data_dir, followed_atom="C", number=1.0):
     """
     modify "atom_scheme_base.json", change atom number to number
     """
-    fn1 = os.path.join(file_dir, "input", "atom_scheme_base.json")
+    fn1 = os.path.join(data_dir, "input", "atom_scheme_base.json")
 
     atom_scheme = rwc.read_configuration(fn1)
 
     for key in atom_scheme[followed_atom]:
         atom_scheme[followed_atom][key] = number
 
-    fn0 = os.path.join(file_dir, "input", "atom_scheme_base_backup.json")
+    fn0 = os.path.join(data_dir, "input", "atom_scheme_base_backup.json")
 
     if os.path.isfile(fn1):
         copy2(fn1, fn0)
@@ -114,12 +114,12 @@ def atom_scheme_set_atom_number(file_dir, followed_atom="C", number=1.0):
     rwc.write_configuration(atom_scheme, fn1)
 
 
-def get_atom_scheme(file_dir):
+def get_atom_scheme(data_dir):
     """
     read "atom_scheme.json" and return a dictionary
     """
 
-    f_n_as = os.path.join(file_dir, "input", "atom_scheme.json")
+    f_n_as = os.path.join(data_dir, "input", "atom_scheme.json")
     atom_scheme = rwc.read_configuration(f_n_as)
 
     return atom_scheme
@@ -128,14 +128,14 @@ def get_atom_scheme(file_dir):
 if __name__ == '__main__':
     INIT_TIME = time.time()
 
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-    print(FILE_DIR)
+    print(DATA_DIR)
 
-    # spe_composition_2_atom_scheme(FILE_DIR)
-    # spe_information_2_atom_scheme(FILE_DIR)
-    # atom_scheme_set_atom_number(FILE_DIR, followed_atom="HA3", number=1.0)
-    # update_a_atom_entry(FILE_DIR, source_atoms=["C", "O", "H"], entry_name="HA4", number=1.0)
+    # spe_composition_2_atom_scheme(DATA_DIR)
+    # spe_information_2_atom_scheme(DATA_DIR)
+    # atom_scheme_set_atom_number(DATA_DIR, followed_atom="HA3", number=1.0)
+    # update_a_atom_entry(DATA_DIR, source_atoms=["C", "O", "H"], entry_name="HA4", number=1.0)
 
     END_TIME = time.time()
 

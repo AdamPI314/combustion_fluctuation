@@ -17,7 +17,7 @@ from tools import get_colors_markers_linestyles
 import trajectory
 
 
-def plot_concentrations(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fraction", exclude_names=None,
+def plot_concentrations(data_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fraction", exclude_names=None,
                         renormalization=True, semilogy=False, hasTemp=True):
     """
     plot concentrations give species index list, if exclude is not None, means we are going
@@ -32,19 +32,19 @@ def plot_concentrations(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fracti
 
     colors, markers, _ = get_colors_markers_linestyles()
 
-    s_idx_n, _ = psri.parse_spe_info(file_dir)
+    s_idx_n, _ = psri.parse_spe_info(data_dir)
 
     if hasTemp is True:
         s_idx_n["-1"] = "Temp"
         spe_idx_tmp.append(-1)
 
     time = np.loadtxt(os.path.join(
-        file_dir, "output", "time_dlsode_" + str(tag) + ".csv"), delimiter=",")
-    temp = np.loadtxt(os.path.join(file_dir, "output",
+        data_dir, "output", "time_dlsode_" + str(tag) + ".csv"), delimiter=",")
+    temp = np.loadtxt(os.path.join(data_dir, "output",
                                    "temperature_dlsode_" + str(tag) + ".csv"), delimiter=",")
 
     conc = trajectory.get_normalized_concentration(
-        file_dir, tag=tag, exclude_names=exclude_names, renormalization=renormalization)
+        data_dir, tag=tag, exclude_names=exclude_names, renormalization=renormalization)
 
     counter = 0
     # the time point where reference time tau is
@@ -89,12 +89,12 @@ def plot_concentrations(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fracti
     s_n_str = "_".join(s_idx_n[str(x)] for x in spe_idx_tmp)
     # plt.title(s_n_str)
 
-    fig.savefig(os.path.join(file_dir, "output",
+    fig.savefig(os.path.join(data_dir, "output",
                              "trajectory_" + s_n_str + ".jpg"), dpi=500)
     plt.close()
 
 
-def plot_spe_drc(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fraction", reciprocal=False):
+def plot_spe_drc(data_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fraction", reciprocal=False):
     """
     plot species destruction rate constant, give species index list
     """
@@ -104,17 +104,17 @@ def plot_spe_drc(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fraction", re
 
     colors, markers, _ = get_colors_markers_linestyles()
 
-    s_idx_n, _ = psri.parse_spe_info(file_dir)
+    s_idx_n, _ = psri.parse_spe_info(data_dir)
     s_idx_n["-1"] = "Temp"
 
     spe_idx_tmp.append(-1)
 
     time = np.loadtxt(os.path.join(
-        file_dir, "output", "time_dlsode_" + str(tag) + ".csv"), delimiter=",")
-    temp = np.loadtxt(os.path.join(file_dir, "output",
+        data_dir, "output", "time_dlsode_" + str(tag) + ".csv"), delimiter=",")
+    temp = np.loadtxt(os.path.join(data_dir, "output",
                                    "temperature_dlsode_" + str(tag) + ".csv"), delimiter=",")
 
-    spe_drc = np.loadtxt(os.path.join(file_dir, "output",
+    spe_drc = np.loadtxt(os.path.join(data_dir, "output",
                                       "drc_dlsode_" + str(tag) + ".csv"), delimiter=",")
     counter = 0
     # the time point where reference time tau is
@@ -165,33 +165,33 @@ def plot_spe_drc(file_dir, spe_idx=None, tau=10.0, end_t=1.0, tag="fraction", re
     # plt.title(s_n_str)
 
     if reciprocal is False:
-        fig.savefig(os.path.join(file_dir, "output",
+        fig.savefig(os.path.join(data_dir, "output",
                                  "spe_drc_" + s_n_str + ".jpg"), dpi=500)
     else:
-        fig.savefig(os.path.join(file_dir, "output",
+        fig.savefig(os.path.join(data_dir, "output",
                                  "spe_drc_reciprocal_" + s_n_str + ".jpg"), dpi=500)
 
     plt.close()
 
 
-def plot_reaction_rates(file_dir, reaction_idx=None, tau=10.0, end_t=1.0, tag="fraction"):
+def plot_reaction_rates(data_dir, reaction_idx=None, tau=10.0, end_t=1.0, tag="fraction"):
     """
     plot reaction rates give reaction index list
     """
 
     colors, markers, _ = get_colors_markers_linestyles()
 
-    _, rxn_idx_n = psri.parse_reaction_and_its_index(file_dir)
+    _, rxn_idx_n = psri.parse_reaction_and_its_index(data_dir)
     rxn_idx_n["-1"] = "Temp"
     reaction_idx.append(-1)
 
     if reaction_idx is None:
         reaction_idx = [0]
     time = np.loadtxt(os.path.join(
-        file_dir, "output", "time_dlsode_" + str(tag) + ".csv"), delimiter=",")
-    rxn_rates = np.loadtxt(os.path.join(file_dir, "output",
+        data_dir, "output", "time_dlsode_" + str(tag) + ".csv"), delimiter=",")
+    rxn_rates = np.loadtxt(os.path.join(data_dir, "output",
                                         "reaction_rate_dlsode_" + str(tag) + ".csv"), delimiter=",")
-    temp = np.loadtxt(os.path.join(file_dir, "output",
+    temp = np.loadtxt(os.path.join(data_dir, "output",
                                    "temperature_dlsode_" + str(tag) + ".csv"), delimiter=",")
 
     counter = 0
@@ -234,21 +234,21 @@ def plot_reaction_rates(file_dir, reaction_idx=None, tau=10.0, end_t=1.0, tag="f
     rxn_idx_str = "_".join(str(x) for x in reaction_idx)
     plt.title("reaction rates and Temp")
 
-    fig.savefig(os.path.join(file_dir, "output",
+    fig.savefig(os.path.join(data_dir, "output",
                              "reaction_rate_" + rxn_idx_str + "_" + str(end_t) + ".jpg"), dpi=500)
     plt.close()
 
 
 if __name__ == '__main__':
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-    G_S = global_settings.get_setting(FILE_DIR)
+    G_S = global_settings.get_setting(DATA_DIR)
 
     SPE_LIST = [3, 4, 5, 6, 7]
     # SPE_LIST, _, _ = trajectory.get_species_with_top_n_concentration(
-    #     FILE_DIR, exclude=None, top_n=10,
+    #     DATA_DIR, exclude=None, top_n=10,
     #     traj_max_t=G_S['traj_max_t'], tau=G_S['tau'], end_t=G_S['end_t'],
     #     tag="M", atoms=["C", "O"])
-    plot_concentrations(FILE_DIR, spe_idx=SPE_LIST,
+    plot_concentrations(DATA_DIR, spe_idx=SPE_LIST,
                         tau=G_S['tau'], end_t=0.001, tag="M", exclude_names=None,
                         renormalization=False, semilogy=True, hasTemp=True)

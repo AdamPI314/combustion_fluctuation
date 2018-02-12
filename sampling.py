@@ -44,28 +44,28 @@ def get_random_coef(uniform_uncertainties=None):
     return result
 
 
-def run_a_sample(file_dir):
+def run_a_sample(data_dir):
     """
     run a monte carlo sample with some size
     """
     # sensitivity analysis settings
-    s_a_s = global_settings.get_s_a_setting(file_dir)
+    s_a_s = global_settings.get_s_a_setting(data_dir)
 
     # global k file name, all together
-    g_k_f_n = os.path.join(file_dir, "output", "k_global.csv")
+    g_k_f_n = os.path.join(data_dir, "output", "k_global.csv")
     if os.path.isfile(g_k_f_n):
         os.remove(g_k_f_n)
     # global target file name, all together, target is ignition delay time (ign) here
-    g_t_f_n = os.path.join(file_dir, "output", "ign_global.csv")
+    g_t_f_n = os.path.join(data_dir, "output", "ign_global.csv")
     if os.path.isfile(g_t_f_n):
         os.remove(g_t_f_n)
     # local target file name
-    l_t_f_n = os.path.join(file_dir, "output", "ign_local.csv")
+    l_t_f_n = os.path.join(data_dir, "output", "ign_local.csv")
 
     u_u = get_uniform_uncertainties(
         s_a_s['n_dim'], s_a_s['default_uncertainty'], s_a_s['exclude'])
     # save constant uncertainty to file
-    f_n_u_const = os.path.join(file_dir, "output", "uncertainties_const.csv")
+    f_n_u_const = os.path.join(data_dir, "output", "uncertainties_const.csv")
     np.savetxt(f_n_u_const, u_u, fmt='%.18e',  delimiter=',', newline='\n')
 
     for _ in range(s_a_s['n_run']):
@@ -77,14 +77,14 @@ def run_a_sample(file_dir):
             if int(s_i) >= 0 and int(s_i) < len(r_c):
                 spe_idx_conc[s_i] *= r_c[int(s_i)]
 
-        us.update_s_a_setting(file_dir,
+        us.update_s_a_setting(data_dir,
                               init_temp=s_a_s['init_temp'],
                               critical_temp=s_a_s['critical_temp'],
                               target_temp=s_a_s['target_temp'],
                               end_temp=s_a_s['end_temp'],
                               spe_idx_conc=spe_idx_conc)
 
-        flag = job_drivers.make_run_timeout(file_dir, timeout=s_a_s['timeout'])
+        flag = job_drivers.make_run_timeout(data_dir, timeout=s_a_s['timeout'])
 
         # local target time
         local_t_t = np.loadtxt(l_t_f_n, dtype=float, delimiter=',')
@@ -102,7 +102,7 @@ def run_a_sample(file_dir):
 
 
 if __name__ == '__main__':
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-    print(FILE_DIR)
-    run_a_sample(FILE_DIR)
+    print(DATA_DIR)
+    run_a_sample(DATA_DIR)

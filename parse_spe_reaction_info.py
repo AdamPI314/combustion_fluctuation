@@ -12,11 +12,11 @@ import read_write_configuration as rwc
 # import time
 
 
-def parse_spe_info(file_dir):
+def parse_spe_info(data_dir):
     """
-    parse species info from file= "os.path.join(file_dir, "output", "species_labelling.csv")"
+    parse species info from file= "os.path.join(data_dir, "output", "species_labelling.csv")"
     """
-    f_n = os.path.join(file_dir, "input", "species_labelling.csv")
+    f_n = os.path.join(data_dir, "input", "species_labelling.csv")
     line_content = np.genfromtxt(f_n, dtype=str, delimiter='\n')
 
     matched_str = [re.findall(r"(\d+)\t-->\t([\w|\-|(|)]+)", line)[0]
@@ -29,11 +29,11 @@ def parse_spe_info(file_dir):
     return spe_ind_name_dict, spe_name_ind_dict
 
 
-def parse_species_pair_reaction(file_dir):
+def parse_species_pair_reaction(data_dir):
     """
     parse species pairs and associated reactions, coefficients
     """
-    f_n = os.path.join(file_dir, "input", "species_pairs_reactions_coefs.json")
+    f_n = os.path.join(data_dir, "input", "species_pairs_reactions_coefs.json")
 
     s_p_r_c = rwc.read_configuration(f_n)
     return s_p_r_c
@@ -48,11 +48,11 @@ def read_spe_composition(f_n):
     return data
 
 
-def parse_reaction_and_its_index(file_dir):
+def parse_reaction_and_its_index(data_dir):
     """
-    parse reaction info from file= "os.path.join(file_dir, "input", "reaction_labelling.csv")"
+    parse reaction info from file= "os.path.join(data_dir, "input", "reaction_labelling.csv")"
     """
-    f_n = os.path.join(file_dir, "input", "reaction_labelling.csv")
+    f_n = os.path.join(data_dir, "input", "reaction_labelling.csv")
     # load data
     line_content = np.genfromtxt(f_n, dtype=str, delimiter='\n')
     matched_tmp = [re.findall(r"([\d]+)\s+([\-\d]+)\s+([\w\(\)\-\_,\+]+\<?={1}\>?[\w\(\)\-\_,\+]+)", line)
@@ -125,7 +125,7 @@ def pathname_to_real_spe_reaction(spe_ind_name_dict, new_ind_reaction_dict, path
     return str_t
 
 
-def symbolic_path_2_real_path(file_dir, f_n_p, f_n_p_out, top_n=50, end_s_idx=None, max_rows=5000):
+def symbolic_path_2_real_path(data_dir, f_n_p, f_n_p_out, top_n=50, end_s_idx=None, max_rows=5000):
     """
     read species and reaction info,
     convert path info into real species and reaction instead of index and write to file
@@ -152,8 +152,8 @@ def symbolic_path_2_real_path(file_dir, f_n_p, f_n_p_out, top_n=50, end_s_idx=No
         path_data = path_data[path_data['path'].str.endswith(end_spe_tuple)]
 
     # load spe and reaction info
-    spe_ind_name_dict, _ = parse_spe_info(file_dir)
-    _, new_ind_reaction_dict = parse_reaction_and_its_index(file_dir)
+    spe_ind_name_dict, _ = parse_spe_info(data_dir)
+    _, new_ind_reaction_dict = parse_reaction_and_its_index(data_dir)
 
     # convert species reaction index to real species and reactions
     path_data['path'] = path_data['path'].apply(
@@ -164,11 +164,11 @@ def symbolic_path_2_real_path(file_dir, f_n_p, f_n_p_out, top_n=50, end_s_idx=No
                               index=False, sep=',', columns=['path', 'prob'])
 
 
-def parse_reaction_net_reactant(file_dir):
+def parse_reaction_net_reactant(data_dir):
     """
     return a dict of "species": number based on reaction reactant
     """
-    f_n = os.path.join(file_dir, "input", "reaction_information.json")
+    f_n = os.path.join(data_dir, "input", "reaction_information.json")
 
     data = rwc.read_configuration(f_n)
 
@@ -183,11 +183,11 @@ def parse_reaction_net_reactant(file_dir):
     return net_reactant
 
 
-def parse_reaction_net_product(file_dir):
+def parse_reaction_net_product(data_dir):
     """
     return a dict of "species": number based on reaction product
     """
-    f_n = os.path.join(file_dir, "input", "reaction_information.json")
+    f_n = os.path.join(data_dir, "input", "reaction_information.json")
 
     data = rwc.read_configuration(f_n)
 
@@ -203,8 +203,8 @@ def parse_reaction_net_product(file_dir):
 
 
 if __name__ == '__main__':
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-    print(FILE_DIR)
+    print(DATA_DIR)
 
-    parse_reaction_net_product(FILE_DIR)
+    parse_reaction_net_product(DATA_DIR)

@@ -13,28 +13,28 @@ import trajectory
 import global_settings
 
 
-def update_terminal_species_setting(file_dir, terminal_spe=None):
+def update_terminal_species_setting(data_dir, terminal_spe=None):
     """
     update settings.json, primarily for terminal species
     """
-    us.update_terminal_species_setting(file_dir, terminal_spe=terminal_spe)
+    us.update_terminal_species_setting(data_dir, terminal_spe=terminal_spe)
 
 
-def update_chattering_species_setting(file_dir, atom_followed="C"):
+def update_chattering_species_setting(data_dir, atom_followed="C"):
     """
     update settings.json, primarily for chattering species and fast reactions
     """
-    us.update_chattering_species_setting(file_dir, atom_followed)
+    us.update_chattering_species_setting(data_dir, atom_followed)
 
 
-def copy_sohr_files(file_dir, species_path=False):
+def copy_sohr_files(data_dir, species_path=False):
     """
     copy SOHR files from C++ routine
     """
-    naming.copy_sohr_files(file_dir, species_path=species_path)
+    naming.copy_sohr_files(data_dir, species_path=species_path)
 
 
-def symbolic_path_2_real_path(file_dir, top_n=50, flag="", end_s_idx=None, species_path=False, max_rows=5000):
+def symbolic_path_2_real_path(data_dir, top_n=50, flag="", end_s_idx=None, species_path=False, max_rows=5000):
     """
     convert symbolic pathway to real pathway with real species name and real reaction name
     flag indicates a specific job, for example, pathway end time = 1.0, the j-th run,
@@ -52,43 +52,43 @@ def symbolic_path_2_real_path(file_dir, top_n=50, flag="", end_s_idx=None, speci
     path_stat_fn = prefix + "pathway_stat.csv"
 
     psri.symbolic_path_2_real_path(
-        file_dir,
+        data_dir,
         os.path.join(
-            file_dir, "output", path_stat_fn),
+            data_dir, "output", path_stat_fn),
         os.path.join(
-            file_dir, "output", out_file_name),
+            data_dir, "output", out_file_name),
         top_n, end_s_idx, max_rows=max_rows)
 
 
 # path from file
-def symbolic_path_2_real_path_pff(file_dir, fn):
+def symbolic_path_2_real_path_pff(data_dir, fn):
     """
     convert symbolic pathway to real pathway with real species name and real reaction name
     """
     out_fn = fn[0:-4] + "_real_path" + ".csv"
 
     psri.symbolic_path_2_real_path(
-        file_dir,
+        data_dir,
         os.path.join(
-            file_dir, "output", fn),
+            data_dir, "output", fn),
         os.path.join(
-            file_dir, "output", out_fn),
+            data_dir, "output", out_fn),
         10000000, None)
 
 
-def delete_non_dlsode_files(file_dir):
+def delete_non_dlsode_files(data_dir):
     """
     delete none dlsode files
     """
-    os.chdir(file_dir)
+    os.chdir(data_dir)
     cmd = ["find", "./output", "-type", "f",
            "!", "-name", "*dlsode*", "-delete"]
 
     # Open/Create the output file
     out_file = open(os.path.join(
-        file_dir, 'output', 'output_all.txt'), 'ab+')
+        data_dir, 'output', 'output_all.txt'), 'ab+')
     error_file = open(os.path.join(
-        file_dir, 'output', 'error_all.txt'), 'ab+')
+        data_dir, 'output', 'error_all.txt'), 'ab+')
 
     try:
         result = subprocess.Popen(
@@ -105,18 +105,18 @@ def delete_non_dlsode_files(file_dir):
     error_file.close()
 
 
-def make_run(file_dir):
+def make_run(data_dir):
     """
     make run
     """
-    os.chdir(file_dir)
+    os.chdir(data_dir)
     cmd = ["make", "run"]
 
     # Open/Create the output file
     out_file = open(os.path.join(
-        file_dir, 'output', 'output_all.txt'), 'ab+')
+        data_dir, 'output', 'output_all.txt'), 'ab+')
     error_file = open(os.path.join(
-        file_dir, 'output', 'error_all.txt'), 'ab+')
+        data_dir, 'output', 'error_all.txt'), 'ab+')
 
     try:
         result = subprocess.Popen(
@@ -133,19 +133,19 @@ def make_run(file_dir):
     error_file.close()
 
 
-def make_run_timeout(file_dir, timeout=None):
+def make_run_timeout(data_dir, timeout=None):
     """
     make run with timeout functionaliry
     https://stackoverflow.com/questions/1191374/using-module-subprocess-with-timeout
     """
-    os.chdir(file_dir)
+    os.chdir(data_dir)
     cmd = ["make", "run"]
 
     # Open/Create the output file
     out_file = open(os.path.join(
-        file_dir, 'output', 'output_all.txt'), 'ab+')
+        data_dir, 'output', 'output_all.txt'), 'ab+')
     error_file = open(os.path.join(
-        file_dir, 'output', 'error_all.txt'), 'ab+')
+        data_dir, 'output', 'error_all.txt'), 'ab+')
 
     try:
         subprocess.check_call(
@@ -166,37 +166,37 @@ def make_run_timeout(file_dir, timeout=None):
         return False
 
 
-def run_dlsode(file_dir, max_time, critical_time):
+def run_dlsode(data_dir, max_time, critical_time):
     """
     Run dlsode
     """
-    os.chdir(file_dir)
-    us.update_dlsode_setting(file_dir, max_time, critical_time)
-    make_run(file_dir)
+    os.chdir(data_dir)
+    us.update_dlsode_setting(data_dir, max_time, critical_time)
+    make_run(data_dir)
 
 
-def spe_concentration_at_time_w2f(file_dir, tau=10.0, end_t=1.0):
+def spe_concentration_at_time_w2f(data_dir, tau=10.0, end_t=1.0):
     """
     write species concentration at a time to file
     """
-    os.chdir(file_dir)
-    us.update_spe_concentration_at_time_w2f(file_dir, tau=tau, end_t=end_t)
-    make_run(file_dir)
+    os.chdir(data_dir)
+    us.update_spe_concentration_at_time_w2f(data_dir, tau=tau, end_t=end_t)
+    make_run(data_dir)
 
 
-def run_mc_trajectory(file_dir, n_traj=1000000, atom_followed="C", init_spe=114,
+def run_mc_trajectory(data_dir, n_traj=1000000, atom_followed="C", init_spe=114,
                       tau=10.0, begin_t=0.0, end_t=1.0, species_path=False):
     """
     Run mc trajectory
     """
-    os.chdir(file_dir)
+    os.chdir(data_dir)
     us.update_mc_trajectory_setting(
-        file_dir, n_traj=n_traj, atom_followed=atom_followed, init_spe=init_spe,
+        data_dir, n_traj=n_traj, atom_followed=atom_followed, init_spe=init_spe,
         tau=tau, begin_t=begin_t, end_t=end_t, species_path=species_path)
-    make_run(file_dir)
+    make_run(data_dir)
 
 
-def evaluate_pathway_probability(file_dir, top_n=5, num_t=1, flag="", n_traj=10000,
+def evaluate_pathway_probability(data_dir, top_n=5, num_t=1, flag="", n_traj=10000,
                                  atom_followed="C", init_spe=114, traj_max_t=100.0,
                                  tau=10.0, begin_t=0.0, end_t=1.0, top_n_s=10,
                                  spe_oriented=True, end_s_idx=None, species_path=False):
@@ -205,49 +205,49 @@ def evaluate_pathway_probability(file_dir, top_n=5, num_t=1, flag="", n_traj=100
     top_n_s is top N species number
     num_t is number of time points
     """
-    os.chdir(file_dir)
+    os.chdir(data_dir)
 
     if spe_oriented is True:
         us.update_eval_path_integral(
-            file_dir, top_n=top_n * top_n_s, n_traj=n_traj,
+            data_dir, top_n=top_n * top_n_s, n_traj=n_traj,
             atom_followed=atom_followed, init_spe=init_spe,
             tau=tau, begin_t=begin_t, end_t=end_t, species_path=species_path)
 
         if end_s_idx is None or end_s_idx is []:
             end_s_idx, _, _ = trajectory.get_species_with_top_n_concentration(
-                file_dir, exclude=None, top_n=top_n_s, traj_max_t=traj_max_t,
+                data_dir, exclude=None, top_n=top_n_s, traj_max_t=traj_max_t,
                 tau=tau, end_t=end_t, tag="M", atoms=[atom_followed])
         ppnt.prepare_pathway_name(
-            file_dir, top_n=top_n, flag=flag, end_s_idx=end_s_idx, species_path=species_path)
+            data_dir, top_n=top_n, flag=flag, end_s_idx=end_s_idx, species_path=species_path)
         ppnt.prepare_pathway_time(
-            file_dir, top_n=top_n * top_n_s, num=num_t, flag=flag,
+            data_dir, top_n=top_n * top_n_s, num=num_t, flag=flag,
             begin_t=begin_t, end_t=end_t, species_path=species_path)
     else:
         us.update_eval_path_integral(
-            file_dir, top_n=top_n, n_traj=n_traj, atom_followed=atom_followed, init_spe=init_spe,
+            data_dir, top_n=top_n, n_traj=n_traj, atom_followed=atom_followed, init_spe=init_spe,
             tau=tau, begin_t=begin_t, end_t=end_t, species_path=species_path)
         ppnt.prepare_pathway_name(
-            file_dir, top_n=top_n, flag=flag, end_s_idx=end_s_idx, species_path=species_path)
+            data_dir, top_n=top_n, flag=flag, end_s_idx=end_s_idx, species_path=species_path)
         ppnt.prepare_pathway_time(
-            file_dir, top_n=top_n, num=num_t, flag=flag, begin_t=begin_t, end_t=end_t, species_path=species_path)
+            data_dir, top_n=top_n, num=num_t, flag=flag, begin_t=begin_t, end_t=end_t, species_path=species_path)
 
-    make_run(file_dir)
+    make_run(data_dir)
 
 
-def send_email(file_dir):
+def send_email(data_dir):
     """
     send email to elliot.srbai@gmail.com
     """
-    os.chdir(file_dir)
+    os.chdir(data_dir)
     cmd = ["sendemail", "-f", "elliot.srbai@gmail.com", "-t", "bunnysirah@hotmail.com",
-           "-u", "RUNNING JOB", "-m", "JOB FINISHED." + "\n" + file_dir,
-           "-a", os.path.join(file_dir, "output", "output_all.txt")]
+           "-u", "RUNNING JOB", "-m", "JOB FINISHED." + "\n" + data_dir,
+           "-a", os.path.join(data_dir, "output", "output_all.txt")]
 
     # Open/Create the output file
     out_file = open(os.path.join(
-        file_dir, 'output', 'output_all.txt'), 'ab+')
+        data_dir, 'output', 'output_all.txt'), 'ab+')
     error_file = open(os.path.join(
-        file_dir, 'output', 'error_all.txt'), 'ab+')
+        data_dir, 'output', 'error_all.txt'), 'ab+')
 
     try:
         result = subprocess.Popen(
@@ -265,9 +265,9 @@ def send_email(file_dir):
 
 
 if __name__ == '__main__':
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-    G_S = global_settings.get_setting(FILE_DIR)
-    # symbolic_path_2_real_path_pff(FILE_DIR, "heuristic_pathname_O_10_10_3.csv")
+    G_S = global_settings.get_setting(DATA_DIR)
+    # symbolic_path_2_real_path_pff(DATA_DIR, "heuristic_pathname_O_10_10_3.csv")
     spe_concentration_at_time_w2f(
-        FILE_DIR, tau=G_S['tau'], end_t=0.00022854295)
+        DATA_DIR, tau=G_S['tau'], end_t=0.00022854295)

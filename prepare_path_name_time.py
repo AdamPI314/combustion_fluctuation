@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 
-def prepare_pathway_name(file_dir, top_n=5, flag="", delimiter=",", end_s_idx=None, species_path=False):
+def prepare_pathway_name(data_dir, top_n=5, flag="", delimiter=",", end_s_idx=None, species_path=False):
     """
     prepare pathway_name_candidate.csv
     """
@@ -15,13 +15,13 @@ def prepare_pathway_name(file_dir, top_n=5, flag="", delimiter=",", end_s_idx=No
     prefix = ""
     if species_path is True:
         prefix = "species_"
-    f_n_ps = os.path.join(file_dir, "output", prefix + "pathway_stat.csv")
+    f_n_ps = os.path.join(data_dir, "output", prefix + "pathway_stat.csv")
 
     if flag == "":
-        f_n_pn = os.path.join(file_dir, "output",
+        f_n_pn = os.path.join(data_dir, "output",
                               prefix + "pathway_name_candidate.csv")
     else:
-        f_n_pn = os.path.join(file_dir, "output",
+        f_n_pn = os.path.join(data_dir, "output",
                               prefix + "pathway_name_candidate_" + str(flag) + ".csv")
 
     try:
@@ -45,7 +45,7 @@ def prepare_pathway_name(file_dir, top_n=5, flag="", delimiter=",", end_s_idx=No
     np.savetxt(f_n_pn, path_list, fmt="%s")
 
 
-def prepare_pathway_time(file_dir, top_n=5, num=1, flag="", begin_t=0.0, end_t=1.0, species_path=False):
+def prepare_pathway_time(data_dir, top_n=5, num=1, flag="", begin_t=0.0, end_t=1.0, species_path=False):
     """
     prepare pathway_time.csv
     num represents number of points
@@ -54,10 +54,10 @@ def prepare_pathway_time(file_dir, top_n=5, num=1, flag="", begin_t=0.0, end_t=1
     if species_path is True:
         prefix = "species_"
     if flag == "":
-        f_n_pt = os.path.join(file_dir, "output",
+        f_n_pt = os.path.join(data_dir, "output",
                               prefix + "pathway_time_candidate.csv")
     else:
-        f_n_pt = os.path.join(file_dir, "output",
+        f_n_pt = os.path.join(data_dir, "output",
                               prefix + "pathway_time_candidate_" + str(flag) + ".csv")
 
     try:
@@ -75,9 +75,9 @@ def prepare_pathway_time(file_dir, top_n=5, num=1, flag="", begin_t=0.0, end_t=1
 
 if __name__ == '__main__':
     #     print("hello")
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-#     print(FILE_DIR)
+#     print(DATA_DIR)
 
-    prepare_pathway_name(FILE_DIR, top_n=5, flag="",
+    prepare_pathway_name(DATA_DIR, top_n=5, flag="",
                          delimiter=",", end_s_idx=[62, 59])

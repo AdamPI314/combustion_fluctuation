@@ -7,23 +7,23 @@ from collections import OrderedDict, defaultdict
 import union_find
 
 
-def get_chattering_species(file_dir, atom_followed="C"):
+def get_chattering_species(data_dir, atom_followed="C"):
     """
     get_chattering_species
     """
     try:
-        sys.path.append(os.path.join(file_dir, "input"))
+        sys.path.append(os.path.join(data_dir, "input"))
         import local_settings
         return local_settings.get_chattering_species(atom_followed)
     except IOError:
         return OrderedDict()
 
 
-def get_union_find_group(file_dir, atom_followed="C"):
+def get_union_find_group(data_dir, atom_followed="C"):
     """
     return union_find_groups
     """
-    chattering_species = get_chattering_species(file_dir, atom_followed)
+    chattering_species = get_chattering_species(data_dir, atom_followed)
 
     counter = 0
     spe_idx_label = dict()
@@ -84,26 +84,26 @@ def get_union_find_group(file_dir, atom_followed="C"):
     return idx_group
 
 
-def get_setting(file_dir):
+def get_setting(data_dir):
     """
     return global settings
     """
     setting = {}
     try:
-        sys.path.append(os.path.join(file_dir, "input"))
+        sys.path.append(os.path.join(data_dir, "input"))
         import local_settings
         return local_settings.get_local_settings()
     except IOError:
         return setting
 
 
-def get_s_a_setting(file_dir):
+def get_s_a_setting(data_dir):
     """
     return sensitivity analysis setting
     """
     setting = {}
     try:
-        sys.path.append(os.path.join(file_dir, "input"))
+        sys.path.append(os.path.join(data_dir, "input"))
         import local_settings
         return local_settings.get_s_a_setting()
     except IOError:
@@ -111,7 +111,7 @@ def get_s_a_setting(file_dir):
 
 
 if __name__ == '__main__':
-    FILE_DIR = os.path.abspath(os.path.join(os.path.realpath(
+    DATA_DIR = os.path.abspath(os.path.join(os.path.realpath(
         sys.argv[0]), os.pardir, os.pardir, os.pardir, os.pardir, "SOHR_DATA"))
-    get_union_find_group(FILE_DIR, atom_followed="C")
+    get_union_find_group(DATA_DIR, atom_followed="C")
     print("test")
